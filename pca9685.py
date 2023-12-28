@@ -2,6 +2,8 @@ import ustruct
 import time
 from machine import Pin, I2C
 
+# The PCA9685 class is a Python class that provides methods for controlling a PCA9685 PWM driver chip
+# via I2C communication.
 class PCA9685:
     def __init__(self, i2c, address=0x40):
         self.i2c = i2c
@@ -18,6 +20,17 @@ class PCA9685:
         self._write(0x00, 0x00) # Mode1
 
     def freq(self, freq=None):
+        """
+        The `freq` function calculates and sets the frequency of a device based on a given value or reads
+        the current frequency if no value is provided.
+        
+        :param freq: The `freq` parameter is used to set the frequency of the device. If no value is
+        provided, the method calculates and returns the current frequency based on the device's
+        configuration. If a value is provided, the method sets the frequency to the specified value
+        :return: If the `freq` parameter is `None`, the function will return the calculated frequency based
+        on the value read from register 0xfe. If the `freq` parameter is provided, the function will set the
+        prescale value based on the desired frequency and return `None`.
+        """
         if freq is None:
             return int(25000000.0 / 4096 / (self._read(0xfe) - 0.5))
         prescale = int(25000000.0 / 4096.0 / freq + 0.5)
@@ -29,6 +42,19 @@ class PCA9685:
         self._write(0x00, old_mode | 0xa1) # Mode 1, autoincrement on
 
     def pwm(self, index, on=None, off=None):
+        """
+        The code defines two functions, `pwm` and `duty`, for controlling the pulse width modulation (PWM)
+        of a device.
+        
+        :param index: The index parameter is used to specify which PWM channel to control. It is an integer
+        value that represents the index of the PWM channel
+        :param on: The "on" parameter in the "pwm" function represents the number of clock cycles the PWM
+        signal should stay high. It determines the duration of the "on" state of the signal
+        :param off: The "off" parameter in the "pwm" function represents the number of clock cycles the PWM
+        signal should be off for. It determines the duration of the low state of the signal
+        :return: The `pwm` function returns a tuple of two values, `on` and `off`, which represent the on
+        and off times of the PWM signal.
+        """
         if on is None or off is None:
             data = self.i2c.readfrom_mem(self.address, 0x06 + 4 * index, 4)
             return ustruct.unpack('<HH', data)

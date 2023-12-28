@@ -13,6 +13,7 @@ servo_direction = True
 
 
 ###########################################################################
+# The code you provided is for configuring and initializing a Time of Flight (ToF) sensor.
 #TIME OF FLIGHT CODE
 tof = VL53L0X(i2c_0)
 
@@ -34,6 +35,14 @@ tof.set_Vcsel_pulse_period(tof.vcsel_period_type[1], 8)
 ##################################################################################
 #INTERRUPT CODE
 def timer_callback(timer):
+    """
+    The timer_callback function is responsible for executing code when a timer interrupt occurs,
+    including updating the servo motor position and reading distance values.
+    
+    :param timer: The "timer" parameter is a reference to the timer that triggered the interrupt. It is
+    used to identify which timer caused the interrupt and perform specific actions based on that
+    information
+    """
     #Code to execute when timer interrupt occurs
     print("irq\n")
     #Get the distance readings and save them and increment the servo motor position

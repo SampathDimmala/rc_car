@@ -30,6 +30,11 @@ drive = motorControl_i2c.motorControl_i2c_module(i2c_1)
 
 
 def actSTA():
+  """
+  The function `actSTA` returns the STA interface of the network module, ensuring it is active and
+  disconnected.
+  :return: the `sta` object, which is an instance of the `network.WLAN` class.
+  """
     sta = network.WLAN(network.STA_IF)
     if sta.active() and sta.isconnected():
       sta.disconnect()
@@ -37,6 +42,11 @@ def actSTA():
     return sta
 
 def connectToAP():
+  """
+  The function "connectToAP" connects to a Wi-Fi access point named "MARKHFR" with the password
+  "MARKHFR11" and returns the connection status.
+  :return: the `sta` object, which is an instance of the `actSTA` class.
+  """
     sta = actSTA()
     print(sta.isconnected())
     if not sta.isconnected():
@@ -48,6 +58,15 @@ def connectToAP():
       return sta
 
 def processPathLine(path):
+  """
+  The function `processPathLine` takes a path as input and extracts the main function and
+  sub-functions from it, then performs specific actions based on the extracted information.
+  
+  :param path: The `path` parameter is a string that represents a URL path. It is used to extract
+  information about the desired action and parameters to be processed
+  :return: nothing if an exception occurs during the try block. Otherwise, it is printing the main
+  function and sub functions and then executing different actions based on the main function.
+  """
   action = "halt"
   pwm_Val =0
   fron_wheel_servo_index =0
@@ -76,6 +95,10 @@ def processPathLine(path):
 
 
 def startServer():
+  """
+  The function "startServer" sets up a socket server on port 80 and listens for incoming connections.
+  :return: a socket object.
+  """
   connectToAP()
   addrInfo = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
   soc = socket.socket()
@@ -85,6 +108,13 @@ def startServer():
   return soc
   
 def listenToServer(soc):
+  """
+  The function `listenToServer` listens for incoming connections, processes the request, and sends a
+  response in HTML format.
+  
+  :param soc: The parameter `soc` is expected to be a socket object that is used for listening and
+  accepting incoming connections from clients
+  """
   cl, addr = soc.accept()
   print(addr)
   req = cl.recv(1024)

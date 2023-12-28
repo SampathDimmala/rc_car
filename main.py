@@ -9,6 +9,8 @@ import motorControl_i2c
 
 
 
+# The code is creating a socket object by calling the `startServer()` function from the `netLib`
+# module. This socket object is used to establish a connection with a server.
 
 socket = netLib.startServer()
 
